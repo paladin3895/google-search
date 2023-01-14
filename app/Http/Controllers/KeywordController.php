@@ -8,6 +8,10 @@ use Illuminate\Support\Collection;
 
 class KeywordController extends Controller
 {
+    public static function getMethodName($name)
+    {
+        return static::class . '@' . $name;
+    }
 
     /**
      * return a list of user's keywords
