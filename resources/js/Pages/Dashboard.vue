@@ -4,54 +4,22 @@ import { Head } from '@inertiajs/inertia-vue3';
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Keywords" />
 
     <AuthenticatedLayout>
         <div class="flex h-screen antialiased text-gray-900 bg-gray-100 dark:bg-dark dark:text-light">
-            <aside class="fixed inset-y-0 z-10 flex-shrink-0 w-64 bg-white border-r lg:static dark:border-indigo-800 dark:bg-darker focus:outline-none">
-                <div class="flex flex-col h-full">
-                    <!-- Sidebar links -->
-                    <nav aria-label="Main" class="flex-1 px-2 py-4 space-y-2 overflow-y-hidden hover:overflow-y-auto">
-                        <!-- Dashboards links -->
-                        <div>
-                            <!-- active & hover classes 'bg-indigo-100 dark:bg-indigo-600' -->
-                            <a class="flex items-center p-2 text-gray-500 transition-colors rounded-md dark:text-light hover:bg-indigo-100 dark:hover:bg-indigo-600" role="button" aria-haspopup="true" aria-expanded="false">
-                                <span aria-hidden="true">
-                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                    </svg>
-                                </span>
-                                <span class="ml-2 text-sm"> Dashboards </span>
-                                <span class="ml-auto" aria-hidden="true">
-                                    <!-- active class 'rotate-180' -->
-                                    <svg class="w-4 h-4 transition-transform transform" :class="{ 'rotate-180': open }" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </span>
-                            </a>
-                            <div role="menu" class="mt-2 space-y-2 px-7" aria-label="Dashboards" style="display: none;">
-                                <!-- active & hover classes 'text-gray-700 dark:text-light' -->
-                                <!-- inActive classes 'text-gray-400 dark:text-gray-400' -->
-                                <a role="menuitem" class="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700">
-                                    Default
-                                </a>
-                                <a role="menuitem" class="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700">
-                                    Project Mangement
-                                </a>
-                                <a role="menuitem" class="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700">
-                                    E-Commerce
-                                </a>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-            </aside>
-            <section class="fixed inset-y-0 z-10 flex-shrink-0 w-64 bg-white border-r dark:border-indigo-800 dark:bg-darker lg:static focus:outline-none">
+            <section class="fixed inset-y-0 z-12 flex-shrink-0 w-64 bg-white border-r dark:border-indigo-800 dark:bg-darker lg:static focus:outline-none">
                 <div class="flex flex-col h-screen">
                     <!-- Panel header -->
                     <div class="flex-shrink-0">
                         <div class="px-4 pt-4 border-b dark:border-indigo-800">
-                            <h2 class="pb-4 font-semibold">Header</h2>
+                            <div class="flex">
+                            <h2 class="pb-4 font-semibold">Keywords</h2>
+                            <button type="button" class="flex ml-auto mb-3 text-xs text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                                <vue-feather type="upload" size="16" class="mr-3" />
+                                Upload
+                            </button>
+                            </div>
                         </div>
                     </div>
 
@@ -84,3 +52,20 @@ import { Head } from '@inertiajs/inertia-vue3';
         </div>
     </AuthenticatedLayout>
 </template>
+<script charset="utf-8">
+
+export default {
+
+    components: {
+
+    },
+
+    mounted() {
+        document.body.classList.add('overflow-y-hidden');
+    },
+
+    unmounted() {
+        document.body.classList.remove('overflow-y-hidden');
+    },
+}
+</script>
