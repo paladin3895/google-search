@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Keyword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class KeywordController extends Controller
 {
@@ -20,7 +22,10 @@ class KeywordController extends Controller
      */
     public function index()
     {
-        return null;
+        /** @var User */
+        $user = Auth::user();
+
+        return $user->keywords()->get();
     }
 
     /**
@@ -28,9 +33,18 @@ class KeywordController extends Controller
      *
      * @return Keyword
      */
-    public function show($param)
+    public function show(Request $request, $id)
     {
-        return null;
+        /** @var User */
+        $user = Auth::user();
+
+        $keyword = $user->keywords()->find($id);
+
+        if (!$keyword) {
+            throw new NotFoundHttpException('Keyword not found');
+        }
+
+        return $keyword;
     }
 
 }

@@ -26,4 +26,5 @@ Route::group([
     'middleware' => ['auth:sanctum'],
 ], function () {
     Route::get('/keywords', KeywordController::getMethodName('index'))->name('index');
+    Route::get('/keywords/{id}', KeywordController::getMethodName('show'))->name('show');
 });

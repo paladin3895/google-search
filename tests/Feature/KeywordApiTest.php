@@ -2,23 +2,65 @@
 
 namespace Tests\Feature;
 
+use App\Models\Keyword;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class KeywordApiTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var User */
+        $this->user = User::factory()->create();
+        $this->token = $this->user->createToken('Test')->plainTextToken;
+        $this->keyword = Keyword::factory()->create([
+            'user_id' => $this->user->id,
+        ]);
+    }
+
     /**
-     * A basic feature test example.
+     * It should return a list of user keywords
      *
      * @return void
      */
     public function test_keywords_listing_endpoint()
     {
-        $response = $this->get('/api/keywords');
+        $response = $this->get('/api/keywords', [
+            'authorization' => 'Bearer ' . $this->token,
+        ]);
 
         $response->assertStatus(200);
+        $response->assertJsonCount(1);
+    }
+
+    /**
+     * It should return the search results of user keyword by ID
+     *
+     * @return void
+     */
+    public function test_keyword_results_endpoint()
+    {
+        $response = $this->get('/api/keywords/' . $this->keyword->id, [
+            'authorization' => 'Bearer ' . $this->token,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(function (AssertableJson $json){
+            return $json->where('id', $this->keyword->id)
+                        ->hasAny([
+                            'adwords',
+                            'links',
+                            'results',
+                            'html',
+                        ])
+                        ->etc();
+        });
     }
 }

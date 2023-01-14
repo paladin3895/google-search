@@ -50,6 +50,6 @@ class User extends Authenticatable
      */
     public function keywords(): HasMany
     {
-        return $this->hasMany(Keywords::class);
+        return $this->hasMany(Keyword::class);
     }
 }
