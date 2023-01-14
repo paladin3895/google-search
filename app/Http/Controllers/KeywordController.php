@@ -47,4 +47,13 @@ class KeywordController extends Controller
         return $keyword;
     }
 
+    /**
+     * handle keywords file upload
+     *
+     * @return void
+     */
+    public function upload($param)
+    {
+        return null;
+    }
 }
