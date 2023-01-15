@@ -21,8 +21,7 @@ return new class extends Migration
 
             $table->unsignedInteger('adwords')->nullable();
             $table->unsignedInteger('links')->nullable();
-            $table->unsignedInteger('results')->nullable();
-            $table->unsignedInteger('responsed_time')->nullable();
+            $table->string('results')->nullable();
 
             $table->json('stats')->nullable();
             $table->longText('html')->nullable();

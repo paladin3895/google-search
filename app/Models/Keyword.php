@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use App\Events\KeywordCreated;
+use App\Jobs\KeywordSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\App;
 
 class Keyword extends Model
 {
     use HasFactory;
-
-    const STATE_PENDING = 'pending';
 
     const STATE_PROCESSING = 'processing';
 
@@ -34,6 +33,10 @@ class Keyword extends Model
         'stats' => 'array',
     ];
 
+    public $hidden = [
+        'html',
+    ];
+
     /**
      * initialize model lifecycle hooks
      *
@@ -43,8 +46,13 @@ class Keyword extends Model
     {
         parent::boot();
 
+        // observers that should not be applied when model is used in cli
+        if (App::runningInConsole()) {
+            return;
+        }
+
         static::created(function (Keyword $model) {
-            KeywordCreated::dispatch(new KeywordCreated($model));
+            KeywordSearch::dispatch($model);
         });
     }
 

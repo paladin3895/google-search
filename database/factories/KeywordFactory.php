@@ -22,9 +22,8 @@ class KeywordFactory extends Factory
             'file_name' => 'tmp',
             'adwords' => fake()->randomNumber(3),
             'links' => fake()->randomNumber(2),
-            'results' => fake()->randomNumber(5),
+            'results' => 'About ' . fake()->randomNumber(5) . ' results (0.33 seconds)',
             'html' => fake()->paragraph(),
-            'responsed_time' => fake()->randomNumber(1),
         ];
     }
 }

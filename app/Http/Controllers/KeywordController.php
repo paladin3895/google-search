@@ -30,7 +30,7 @@ class KeywordController extends Controller
     }
 
     /**
-     * return keyword's results and HTML
+     * return keyword's results
      *
      * @return Keyword
      */
@@ -46,6 +46,25 @@ class KeywordController extends Controller
         }
 
         return $keyword;
+    }
+
+    /**
+     * return keyword's HTML
+     *
+     * @return Keyword
+     */
+    public function showHtml(Request $request, $id)
+    {
+        /** @var User */
+        $user = Auth::user();
+
+        $keyword = $user->keywords()->find($id);
+
+        if (!$keyword) {
+            throw new NotFoundHttpException('Keyword not found');
+        }
+
+        return $keyword->html;
     }
 
     /**
