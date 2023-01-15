@@ -60,7 +60,7 @@ class KeywordController extends Controller
     {
         /** @var User */
         $user = Auth::user();
-        $keywords = $user->keywords()->get();
+        $keywords = $user->keywords()->orderBy('updated_at', 'desc')->get();
 
         return Inertia::render('Dashboard', [
             'token' => $user->createToken('auth')->plainTextToken,
