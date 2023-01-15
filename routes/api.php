@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group([
     'middleware' => ['auth:sanctum'],
 ], function () {
-    Route::get('/keywords', KeywordController::getMethodName('index'))->name('index');
-    Route::get('/keywords/{id}', KeywordController::getMethodName('show'))->name('show');
+    Route::get('/keywords', KeywordController::getMethodName('index'))->name('keyword.index');
+    Route::post('/keywords', KeywordController::getMethodName('create'))->name('keyword.create');
+    Route::get('/keywords/{id}', KeywordController::getMethodName('show'))->name('keyword.show');
 });

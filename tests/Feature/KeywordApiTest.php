@@ -53,14 +53,36 @@ class KeywordApiTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJson(function (AssertableJson $json){
-            return $json->where('id', $this->keyword->id)
-                        ->hasAny([
-                            'adwords',
-                            'links',
-                            'results',
-                            'html',
-                        ])
-                        ->etc();
+            return $json
+                ->where('id', $this->keyword->id)
+                ->hasAny([
+                    'adwords',
+                    'links',
+                    'results',
+                    'html',
+                ])
+                ->etc();
+        });
+    }
+
+    /**
+     * It should create user's keyword
+     *
+     * @return void
+     */
+    public function test_keyword_creating_endpoint()
+    {
+        $response = $this->post('/api/keywords', [
+            'key' => 'test',
+        ], [
+            'authorization' => 'Bearer ' . $this->token,
+        ]);
+
+        $response->assertStatus(201);
+        $response->assertJson(function (AssertableJson $json){
+            return $json
+                ->where('key', 'test')
+                ->etc();
         });
     }
 }

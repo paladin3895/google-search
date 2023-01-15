@@ -10,6 +10,12 @@ class Keyword extends Model
 {
     use HasFactory;
 
+    const STATE_PENDING = 'pending';
+
+    const STATE_PROCESSING = 'processing';
+
+    const STATE_PROCESSED = 'processed';
+
     public $fillable = [
         'user_id',
         'key',
@@ -20,6 +26,7 @@ class Keyword extends Model
         'responsed_time',
         'html',
         'stats',
+        'state',
     ];
 
     public $casts = [

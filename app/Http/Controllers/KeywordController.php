@@ -6,6 +6,7 @@ use App\Models\Keyword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class KeywordController extends Controller
@@ -48,12 +49,18 @@ class KeywordController extends Controller
     }
 
     /**
-     * handle keywords file upload
+     * undocumented function
      *
      * @return void
      */
-    public function upload($param)
+    public function create(Request $request)
     {
-        return null;
+        /** @var User */
+        $user = Auth::user();
+
+        $keyword = $user->keywords()->create($request->only('key'));
+
+        return $keyword;
     }
+
 }
