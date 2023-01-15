@@ -8,24 +8,25 @@ import { Head } from '@inertiajs/inertia-vue3';
 
     <AuthenticatedLayout>
         <div class="flex h-screen antialiased text-gray-900 bg-gray-100 dark:bg-dark dark:text-light">
-            <section class="fixed inset-y-0 z-12 flex-shrink-0 w-64 bg-white border-r dark:border-indigo-800 dark:bg-darker lg:static focus:outline-none">
-                <div class="flex flex-col h-screen">
+            <section class="fixed inset-y-0 z-12 flex-shrink-0 w-75 bg-white border-r dark:border-indigo-800 dark:bg-darker lg:static focus:outline-none">
+                <div class="flex flex-col overflow-y-auto" style="height: calc(100vh - 80px)">
                     <!-- Panel header -->
                     <div class="flex-shrink-0">
-                        <div class="px-4 pt-4 border-b dark:border-indigo-800">
+                        <div class="px-3 pt-4 border-b dark:border-indigo-800">
                             <div class="flex">
                             <h2 class="pb-4 font-semibold">Keywords</h2>
-                            <button type="button" class="flex ml-auto mb-3 text-xs text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                            <label for="keyword-upload" type="button" class="flex ml-auto mb-3 text-xs text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                                <input @change.prevent="uploadFile" id="keyword-upload" type="file" style="display: none;">
                                 <vue-feather type="upload" size="16" class="mr-3" />
                                 Upload
-                            </button>
+                            </label>
                             </div>
                         </div>
                     </div>
 
                     <!-- Panel content -->
                     <div class="flex-shrink-0">
-                        <div v-for="keyword in items" class="px-4 pt-3 pb-3 border-b dark:border-indigo-800">
+                        <div v-for="keyword in items" class="px-3 pt-3 pb-3 border-b dark:border-indigo-800">
                             <template v-if="keyword.state === 'processed'">
                                 <a @click="openPage(keyword)" href="javascript:void(0)" class="flex">
                                     <h2 class="pb-3 font-semibold">{{ keyword.key }}</h2>
@@ -120,6 +121,18 @@ export default {
                 this.currentItem = res.data;
                 this.$refs['search-page'].contentDocument.documentElement.innerHTML = this.currentItem.html || '<div><i>Page HTML is not available</i></div>';
             })
+        },
+
+        uploadFile(e) {
+            const file = e.target.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            return http.post('/api/keywords/csv', formData, {
+                headers: {
+                    authorization: `Bearer ${this.token}`
+                }
+            }).then(this.fetchData)
         },
 
         getLink(keyword) {
