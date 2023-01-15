@@ -53,19 +53,7 @@ import { Head } from '@inertiajs/inertia-vue3';
             </section>
             <main class="flex-1">
                 <div class="flex flex-col items-center justify-center flex-1 h-full min-h-screen p-4 overflow-x-hidden overflow-y-auto">
-                    <h1 class="mb-4 text-2xl font-semibold text-center md:text-3xl">Two Columns Sidebar</h1>
-                    <div class="mb-4">
-                        <div class="relative flex p-1 space-x-1 bg-white shadow-md w-80 h-72 dark:bg-darker">
-                            <div class="w-16 h-full bg-gray-200 dark:bg-dark"></div>
-                            <div class="w-16 h-full bg-gray-200 dark:bg-dark"></div>
-                            <div class="flex-1 h-full bg-gray-100 dark:bg-dark"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-center">See full project</p>
-                        <a target="_blank" class="text-base text-blue-600 hover:underline">Live</a>
-                        <a target="_blank" class="ml-4 text-base text-blue-600 hover:underline">Github repo</a>
-                    </div>
+                    <iframe ref="search-page" class="w-full h-full"></iframe>
                 </div>
             </main>
         </div>
@@ -80,6 +68,7 @@ export default {
     data() {
         return {
             items: [],
+            currentItem: null,
         }
     },
 
@@ -100,7 +89,7 @@ export default {
         this.items = this.keywords || [];
 
         // polling for keywords changed
-        setInterval(this.fetchData, 5000);
+        setInterval(this.fetchData, 15000);
     },
 
     mounted() {
@@ -117,10 +106,24 @@ export default {
                 headers: {
                     authorization: `Bearer ${this.token}`
                 }
+            }).then(res => {
+                this.items = res.data;
             })
-                .then(res => {
-                    this.items = res.data;
-                })
+        },
+
+        openPage(keyword) {
+            return http.get(`/api/keywords/${keyword.id}`, {
+                headers: {
+                    authorization: `Bearer ${this.token}`
+                }
+            }).then(res => {
+                this.currentItem = res.data;
+                this.$refs['search-page'].contentDocument.documentElement.innerHTML = this.currentItem.html || '<div><i>Page HTML is not available</i></div>';
+            })
+        },
+
+        getLink(keyword) {
+            return `/api/keywords/${keyword.id}/html`;
         },
 
         formatDatetime(dt) {

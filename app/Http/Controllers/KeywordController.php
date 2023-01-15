@@ -46,26 +46,8 @@ class KeywordController extends Controller
             throw new NotFoundHttpException('Keyword not found');
         }
 
+        $keyword->makeVisible('html');
         return $keyword;
-    }
-
-    /**
-     * return keyword's HTML
-     *
-     * @return Keyword
-     */
-    public function showHtml(Request $request, $id)
-    {
-        /** @var User */
-        $user = Auth::user();
-
-        $keyword = $user->keywords()->find($id);
-
-        if (!$keyword) {
-            throw new NotFoundHttpException('Keyword not found');
-        }
-
-        return $keyword->html;
     }
 
     /**
