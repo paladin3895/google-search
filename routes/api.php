@@ -27,6 +27,6 @@ Route::group([
 ], function () {
     Route::get('/keywords', KeywordController::getMethodName('index'))->name('keyword.index');
     Route::post('/keywords', KeywordController::getMethodName('create'))->name('keyword.create');
+    Route::post('/keywords/csv', KeywordController::getMethodName('upload'))->name('keyword.upload');
     Route::get('/keywords/{id}', KeywordController::getMethodName('show'))->name('keyword.show');
-    Route::get('/keywords/{id}/html', KeywordController::getMethodName('showHtml'))->name('keyword.showHtml');
 });

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Keyword;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -26,7 +28,7 @@ class KeywordController extends Controller
         /** @var User */
         $user = Auth::user();
 
-        return $user->keywords()->get();
+        return $user->keywords()->orderBy('updated_at', 'desc')->get();
     }
 
     /**
@@ -45,26 +47,25 @@ class KeywordController extends Controller
             throw new NotFoundHttpException('Keyword not found');
         }
 
+        $keyword->makeVisible('html');
         return $keyword;
     }
 
     /**
-     * return keyword's HTML
+     * Render keywords dashboard
      *
-     * @return Keyword
+     * @return void
      */
-    public function showHtml(Request $request, $id)
+    public function getDashboard(Request $request)
     {
         /** @var User */
         $user = Auth::user();
+        $keywords = $user->keywords()->get();
 
-        $keyword = $user->keywords()->find($id);
-
-        if (!$keyword) {
-            throw new NotFoundHttpException('Keyword not found');
-        }
-
-        return $keyword->html;
+        return Inertia::render('Dashboard', [
+            'token' => $user->createToken('auth')->plainTextToken,
+            'keywords' => $keywords->toArray(),
+        ]);
     }
 
     /**
@@ -96,6 +97,28 @@ class KeywordController extends Controller
             throw new BadRequestHttpException('Missing upload file');
         }
 
+        /** @var UploadedFile */
+        $file = $request->file('file');
+        $mime = $file->getClientMimeType();
 
+        if ($mime !== 'text/csv') {
+            throw new BadRequestHttpException('Invalid upload file, text/csv required');
+        }
+
+        $csv = $file->openFile('r');
+
+        $keywords = collect();
+        while ($data = $csv->fgetcsv()) {
+            // get first value only
+            $keywords = $keywords->push($data[0]);
+        }
+
+        return $keywords
+            ->filter()
+            ->each(function ($key) use ($user) {
+                $user->keywords()->create([
+                    'key' => $key,
+                ]);
+            });
     }
 }

@@ -59,7 +59,7 @@ class GoogleSearch implements SearchInterface
 
     public function getResults(): string
     {
-        return $this->metadata;
+        return preg_replace("/&#?[a-z0-9]+;/i","", $this->metadata);
     }
 
     public function getAdwords(): array
