@@ -54,6 +54,8 @@ class GoogleSearch implements SearchInterface
             ]
         ]);
         $html = $res->getBody()->getContents();
+        // $html = file_get_contents(base_path('/data/search-js.html'));
+
         $this->metadata = $this->getMetadata($html);
     }
 
@@ -89,6 +91,9 @@ class GoogleSearch implements SearchInterface
 
     public function process(string $html)
     {
+        // repair html invalid formats
+        $html = str_replace('</table></a>', '</table>', $html);
+
         $searchPage = new DOMDocument;
         $searchPage->loadHTML($html);
 
