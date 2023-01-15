@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\KeywordCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,6 +33,20 @@ class Keyword extends Model
     public $casts = [
         'stats' => 'array',
     ];
+
+    /**
+     * initialize model lifecycle hooks
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::created(function (Keyword $model) {
+            KeywordCreated::dispatch(new KeywordCreated($model));
+        });
+    }
 
     /**
      * get owner

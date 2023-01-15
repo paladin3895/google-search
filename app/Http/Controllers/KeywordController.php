@@ -63,4 +63,20 @@ class KeywordController extends Controller
         return $keyword;
     }
 
+    /**
+     * handle keywords file upload
+     *
+     * @return void
+     */
+    public function upload(Request $request)
+    {
+        /** @var User */
+        $user = Auth::user();
+
+        if (!$request->hasFile('file')) {
+            throw new BadRequestHttpException('Missing upload file');
+        }
+
+
+    }
 }

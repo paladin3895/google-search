@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('key')->index();
             $table->string('file_name')->nullable();
+            $table->string('state')->nullable()->index();
+
             $table->unsignedInteger('adwords')->nullable();
             $table->unsignedInteger('links')->nullable();
             $table->unsignedInteger('results')->nullable();
