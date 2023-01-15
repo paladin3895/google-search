@@ -24,10 +24,29 @@ import { Head } from '@inertiajs/inertia-vue3';
                     </div>
 
                     <!-- Panel content -->
-                    <div class="flex-1 pt-4 overflow-y-hidden hover:overflow-y-auto">
-                        <div class="space-y-4">
-                            <!-- Content -->
-                            <p class="px-4">Content</p>
+                    <div class="flex-shrink-0">
+                        <div v-for="keyword in items" class="px-4 pt-3 pb-3 border-b dark:border-indigo-800">
+                            <template v-if="keyword.state === 'processed'">
+                                <a @click="openPage(keyword)" href="javascript:void(0)" class="flex">
+                                    <h2 class="pb-3 font-semibold">{{ keyword.key }}</h2>
+                                    <small class="flex ml-auto">
+                                        {{ formatDatetime(keyword.updated_at) }}
+                                    </small>
+                                </a>
+                                <div class="flex">
+                                    <small>Links: {{ keyword.links }}</small>
+                                    <small class="flex ml-auto">Adwords: {{ keyword.adwords }}</small>
+                                </div>
+                                <span class="text-xs" v-html="keyword.results"></span>
+                            </template>
+                            <template v-else>
+                                <div class="flex">
+                                    <h2 class="font-semibold">{{ keyword.key }}</h2>
+                                    <small class="flex ml-auto">
+                                        Processing...
+                                    </small>
+                                </div>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -53,11 +72,35 @@ import { Head } from '@inertiajs/inertia-vue3';
     </AuthenticatedLayout>
 </template>
 <script charset="utf-8">
+import moment from 'moment';
+import http from 'axios';
 
 export default {
 
+    data() {
+        return {
+            items: [],
+        }
+    },
+
+    props: {
+        token: {
+            type: String,
+        },
+        keywords: {
+            type: Array,
+        },
+    },
+
     components: {
 
+    },
+
+    created() {
+        this.items = this.keywords || [];
+
+        // polling for keywords changed
+        setInterval(this.fetchData, 5000);
     },
 
     mounted() {
@@ -66,6 +109,23 @@ export default {
 
     unmounted() {
         document.body.classList.remove('overflow-y-hidden');
+    },
+
+    methods: {
+        fetchData() {
+            return http.get('/api/keywords', {
+                headers: {
+                    authorization: `Bearer ${this.token}`
+                }
+            })
+                .then(res => {
+                    this.items = res.data;
+                })
+        },
+
+        formatDatetime(dt) {
+            return moment(dt).calendar();
+        },
     },
 }
 </script>

@@ -6,6 +6,7 @@ use App\Models\Keyword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -65,6 +66,23 @@ class KeywordController extends Controller
         }
 
         return $keyword->html;
+    }
+
+    /**
+     * Render keywords dashboard
+     *
+     * @return void
+     */
+    public function getDashboard(Request $request)
+    {
+        /** @var User */
+        $user = Auth::user();
+        $keywords = $user->keywords()->get();
+
+        return Inertia::render('Dashboard', [
+            'token' => $user->createToken('auth')->plainTextToken,
+            'keywords' => $keywords->toArray(),
+        ]);
     }
 
     /**
