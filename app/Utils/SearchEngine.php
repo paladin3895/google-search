@@ -16,7 +16,7 @@ class SearchEngine
     /**
      * undocumented function
      *
-     * @return void
+     * @return SearchInterface
      */
     public function search($type, $query): SearchInterface
     {
