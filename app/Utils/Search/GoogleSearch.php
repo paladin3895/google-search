@@ -14,6 +14,9 @@ use Illuminate\Support\Str;
  */
 class GoogleSearch implements SearchInterface
 {
+    /** @var Client */
+    protected $client;
+
     protected $searchPage;
 
     protected $adwords = [];
@@ -22,11 +25,18 @@ class GoogleSearch implements SearchInterface
 
     protected $metadata;
 
-    public function __construct($keyword)
+    // make http client as a dependency injection for easy testing
+    // I tie it to GuzzleHttp Client for now as it's the go-to Http client
+    // and there is no available Http client interface that provides most of the
+    // methods used here
+    public function __construct(Client $client)
     {
-        $client = new Client([
-            'base_uri' => 'https://www.google.com',
-        ]);
+        $this->client = $client;
+    }
+
+    public function performSearch($keyword): void
+    {
+        $client = $this->client;
 
         $query = http_build_query([
             'q' => $keyword,

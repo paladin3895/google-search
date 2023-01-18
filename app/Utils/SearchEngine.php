@@ -2,9 +2,10 @@
 
 namespace App\Utils;
 
+use InvalidArgumentException;
+use GuzzleHttp\Client;
 use App\Utils\Search\GoogleSearch;
 use App\Utils\Search\SearchInterface;
-use InvalidArgumentException;
 
 /**
  * Class SearchEngine
@@ -22,7 +23,13 @@ class SearchEngine
     {
         switch ($type) {
             case 'Google':
-                return new GoogleSearch($query);
+                $client = new Client([
+                    'base_uri' => config('services.search_engine.search_urls.google'),
+                ]);
+
+                $searchPage = new GoogleSearch($client);
+                $searchPage->performSearch($query);
+                return $searchPage;
             default:
                 throw new InvalidArgumentException('Invalid search engine');
         }
