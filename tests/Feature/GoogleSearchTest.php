@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Request;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Utils\Search\GoogleSearch;
+use App\Services\Search\GoogleSearch;
 use Tests\TestCase;
 
 class GoogleSearchTest extends TestCase

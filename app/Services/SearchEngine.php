@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Utils;
+namespace App\Services;
 
 use InvalidArgumentException;
 use GuzzleHttp\Client;
-use App\Utils\Search\GoogleSearch;
-use App\Utils\Search\SearchInterface;
+use App\Services\Search\GoogleSearch;
+use App\Services\Search\SearchInterface;
 
 /**
  * Class SearchEngine

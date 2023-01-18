@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils\Search;
+namespace App\Services\Search;
 
 use DOMDocument;
 use DOMElement;
