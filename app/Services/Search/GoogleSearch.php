@@ -29,43 +29,47 @@ class GoogleSearch implements SearchInterface
     // I tie it to GuzzleHttp Client for now as it's the go-to Http client
     // and there is no available Http client interface that provides most of the
     // methods used here
-    public function __construct(Client $client)
+    public function __construct(Client $client, array $config = [])
     {
         $this->client = $client;
+        $this->config = $config;
     }
 
     public function performSearch($keyword): void
     {
         $client = $this->client;
+        $userAgents = $this->config['user_agents'] ?? [];
+        $proxyUrls = $this->config['proxy_urls'] ?? null;
+
+        // rotate user-agent
+        $userAgent = $userAgents[array_rand($userAgents, 1)] ?? null;
+
+        // rotate proxy server
+        $proxyUrl = $proxyUrls[array_rand($proxyUrls, 1)] ?? null;
+
+        // populate request headers
+        $headers = [];
+        if ($userAgent) {
+            $headers['user-agent'] = $userAgent;
+        }
+
+        // set proxy (if any) for request
+        if ($proxyUrl) {
+            $headers['proxy'] = $proxyUrl;
+        }
 
         $query = http_build_query([
             'q' => $keyword,
             'hl' => 'en-US',
         ]);
 
-        // search query to get raw HTML
         $res = $client->get('/search?' . $query, [
-            'headers' => [
-                // using old user-agent to get non-javascript, html only search results
-                'user-agent' => 'Mozilla/5.0 (MSIE 9.0; Windows NT 6.1; Trident/5.0)',
-            ]
+            'headers' => $headers
         ]);
         $html = $res->getBody()->getContents();
-        // $html = file_get_contents(base_path('/data/search.html'));
 
-        $this->process($html);
         $this->searchPage = $html;
-
-        // search query to get total results
-        $res = $client->get('/search?' . $query, [
-            'headers' => [
-                // using chrome user-agent to get search metadata
-                'user-agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
-            ]
-        ]);
-        $html = $res->getBody()->getContents();
-        // $html = file_get_contents(base_path('/data/search-js.html'));
-
+        $this->processByRegex($html);
         $this->metadata = $this->getMetadata($html);
     }
 
@@ -99,11 +103,26 @@ class GoogleSearch implements SearchInterface
         return null;
     }
 
+    public function processByRegex(string $html)
+    {
+        // regular expression for links
+        $regex = '/<a(.+?)href=\"(.+?)\"(.+?)>/';
+        if (preg_match_all($regex, $html, $matches)) {
+            $this->links = $matches[2];
+        }
+
+        // regular expression for adwords
+        $regex = '/>(Ad|Ads)</';
+        if (preg_match_all($regex, $html, $matches)) {
+            $this->adwords = $matches[1];
+        }
+    }
+
+    // deprecated as some of the returned HTML is not valid,
+    // it will break the DOMDocument
     public function process(string $html)
     {
         // repair html invalid formats
-        $html = str_replace('</table></a>', '</table>', $html);
-
         $searchPage = new DOMDocument;
         $searchPage->loadHTML($html);
 

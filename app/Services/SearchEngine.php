@@ -27,7 +27,7 @@ class SearchEngine
                     'base_uri' => config('services.search_engine.search_urls.google'),
                 ]);
 
-                $searchPage = new GoogleSearch($client);
+                $searchPage = new GoogleSearch($client, config('services.search_engine'));
                 $searchPage->performSearch($query);
                 return $searchPage;
             default:
