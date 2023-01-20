@@ -29,7 +29,7 @@ import { Head } from '@inertiajs/inertia-vue3';
                         <div v-for="keyword in items" class="px-3 pt-3 pb-3 border-b dark:border-indigo-800">
                             <template v-if="keyword.state === 'processed'">
                                 <a @click="openPage(keyword)" href="javascript:void(0)" class="flex">
-                                    <h2 class="pb-3 font-semibold">{{ keyword.key }}</h2>
+                                    <h2 class="pb-3 font-semibold" :title="keyword.key">{{ formatKeyword(keyword.key) }}</h2>
                                     <small class="flex ml-auto">
                                         {{ formatDatetime(keyword.updated_at) }}
                                     </small>
@@ -141,6 +141,15 @@ export default {
 
         formatDatetime(dt) {
             return moment(dt).calendar();
+        },
+
+        formatKeyword(keyword) {
+            // limit keyword length to 15 chars
+            if (String(keyword).length > 15) {
+                return String(keyword).slice(0, 12) + '...';
+            }
+
+            return keyword;
         },
     },
 }
