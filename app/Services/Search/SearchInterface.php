@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils\Search;
+namespace App\Services\Search;
 
 /**
  * Interface SearchInterface
@@ -8,6 +8,8 @@ namespace App\Utils\Search;
  */
 interface SearchInterface
 {
+    public function performSearch(string $keyword): void;
+
     public function getResults(): string;
 
     public function getAdwords(): array;

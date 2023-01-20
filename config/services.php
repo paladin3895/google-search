@@ -31,4 +31,21 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'search_engine' => [
+        'proxy_urls' => [
+            'http://221.132.18.26:8090', // free Hanoi proxy server
+            'http://113.161.131.43:80', // free Vungtau proxy server
+        ],
+        'user_agents' => [
+            // Chrome on Mac
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36',
+            // Chrome on Ubuntu
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.11 (KHTML, like Gecko) Ubuntu/14.04.6 Chrome/81.0.3990.0 Safari/537.36',
+            // Chrome on Windows
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+        ],
+        'search_urls' => [
+            'google' => 'https://www.google.com',
+        ]
+    ],
 ];
