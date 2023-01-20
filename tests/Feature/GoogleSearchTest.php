@@ -26,8 +26,6 @@ class GoogleSearchTest extends TestCase
         // Create a mock and queue several responses.
         $mock = new MockHandler([
             new Response(200, [], $searchTestPage),
-            new Response(200, [], $searchTestPage),
-            new Response(200, [], $searchTestPage),
         ]);
 
         $handlerStack = HandlerStack::create($mock);
@@ -39,8 +37,8 @@ class GoogleSearchTest extends TestCase
         $searchPage = (new GoogleSearch($client, config('services.search_engine')));
         $searchPage->performSearch('Laravel');
 
-        $this->assertNotEmpty($searchPage->getResults());
-        $this->assertNotEmpty($searchPage->getLinks());
+        $this->assertEquals(count($searchPage->getLinks()), 43);
+        $this->assertEquals($searchPage->getResults(), 'About 13,900,000 results (0.28 seconds)');
         $this->assertNotEmpty($searchPage->getHtml());
     }
 }
