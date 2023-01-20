@@ -4,19 +4,39 @@
 ## Getting started
 
 ### System requirements
+
 - PHP >=8.2
+
 - Composer >=2.5
+
 - MySQL >=5.8 or PostgreSQL >=14.6
+
 - NodeJS >=12.22
+
 ### Installation
 1.  Clone source code from Github repository [Link](https://github.com/paladin3895/google-search.git)
 2. Change directory to source code directory
 3. Run `composer install` to download code dependencies
 4. Copy `.env` file from `.env.example`
 5. Update `.env` config to match your database settings
-| PostgreSQL | MySQL |
-|---------------|----------|
-|![PostgreSQL](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c1ce10cc-68fd-4b1c-b479-7855296f2156/Screenshot_from_2023-01-18_14-14-48.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230118/us-west-2/s3/aws4_request&X-Amz-Date=20230118T071643Z&X-Amz-Expires=86400&X-Amz-Signature=30d0b1c5a8cbb93fb502d8a9a066bcde791a065f806b70344b8fbe903180a416&X-Amz-SignedHeaders=host&response-content-disposition=filename=%22Screenshot%2520from%25202023-01-18%252014-14-48.png%22&x-id=GetObject) |![MySQL](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9a856d47-df78-4dc0-a306-9c28ff715f81/Screenshot_from_2023-01-18_14-14-00.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230118/us-west-2/s3/aws4_request&X-Amz-Date=20230118T071636Z&X-Amz-Expires=86400&X-Amz-Signature=717df1108b484e98936d9dca3c46ff6681a0a9b72bd948c754a8f077a870cffd&X-Amz-SignedHeaders=host&response-content-disposition=filename=%22Screenshot%2520from%25202023-01-18%252014-14-00.png%22&x-id=GetObject) |
+```
+# PostgreSQL settings
+DB_CONNECTION=pgsql
+DB_HOST=localhost
+DB_PORT=54320
+DB_DATABASE=database
+DB_USERNAME=username
+DB_PASSWORD=password
+
+# MySQL settings
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=database
+DB_USERNAME=username
+DB_PASSWORD=password
+
+```
 6. Run `php artisan migrate` to generate database schema
 7. Run the unit tests by this command `php artisan test`
 8. Run `php artisan serve` to start the web server
